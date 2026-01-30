@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y! Messenger</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="scripts/app.js"></script>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="login-window">
+            <div class="login-header">
+                Yahoo! Messenger
+            </div>
+            <div class="login-body">
+                <div class="ym-logo">
+                    <img src="images/yahoo_logo.png" alt="Yahoo! Messenger Logo">
+                </div>
+                <div class="login-form">
+                    <label>Yahoo! ID:</label>
+                    <input type="text" id="login-username" placeholder="Username" autocomplete="off">
+
+                    <button id="login-submit-btn">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container hidden">
+        <header class="app-header">
+            <div class="brand">
+                <span class="y-logo">Y!</span> Messenger
+            </div>
+            <div class="header-status">
+                Signed in as: <strong id="my-username-display">Guest</strong>
+            </div>
+        </header>
+
+        <div class="main-body">
+            <aside class="sidebar">
+                <div class="my-profile-area">
+                    <div class="status-box">
+                        <div class="avatar-box">
+                            <div class="pixel-avatar">ME</div> 
+                        </div>
+                        <div class="my-info">
+                            <span class="my-name" id="my-sidebar-name">Guest</span>
+                            <span class="status-text">Available</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ym-tabs">
+                    <div class="tab active">Contacts</div>
+                </div>
+
+                <div class="contacts-list">
+                    <div class="group-header" style="display: flex; justify-content: space-between; align-items: center; padding-right: 10px;">
+                        <span id="friends-count">▼ Friends (0)</span>
+                        <button id="add-friend-btn" style="cursor: pointer;">+ Add</button>
+                    </div>
+                    <div id="friends-list-container"></div>
+                </div>
+            </aside>
+
+            <main class="chat-area">
+                <div class="chat-top-bar">
+                    <button id="back-btn" class="back-btn">←</button> 
+                    <div class="chat-partner-info">
+                        To: <strong id="current-chat-name">Select a friend</strong> 
+                        <span id="current-chat-status" class="status-brackets"></span>
+                    </div>
+                </div>
+
+                <div id="messages-display" class="messages-display"></div>
+
+                <footer class="chat-input-area">
+                    <div class="format-toolbar">
+                        <button class="fmt-btn font-btn">Verdana (10)</button>
+                        <button class="fmt-btn"><b>B</b></button>
+                        <button class="fmt-btn"><i>I</i></button>
+                        <button class="fmt-btn" style="text-decoration: underline;">U</button>
+                        <div class="separator"></div>
+                        <button class="fmt-btn" style="color:red">Color</button>
+                        <button class="fmt-btn">☺</button>
+                        <button id="buzz-btn" class="buzz-btn">BUZZ!</button>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <textarea id="message-input"></textarea>
+                        <div class="send-container">
+                            <button id="send-btn" class="btn-send">Send</button>
+                        </div>
+                    </div>
+                </footer>
+            </main>
+        </div>
+        
+        <footer class="app-footer">
+            <span>Yahoo! Inc. © 2005 </span>
+        </footer>
+    </div>
+</body>
+</html>

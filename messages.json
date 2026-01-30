@@ -1,0 +1,187 @@
+{
+  "maria_stefan": [
+    {
+      "senderId": "stefan",
+      "text": "salut cf?",
+      "time": "11:06 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:43 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:59 AM",
+      "isBuzz": true
+    }
+  ],
+  "sandel_stefan": [
+    {
+      "senderId": "sandel",
+      "text": "salut bro",
+      "time": "11:46 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:46 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "11:47 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "de ce nu merge buzz ul în rasa mami lui",
+      "time": "11:50 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:50 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "11:50 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "sal",
+      "time": "11:53 AM"
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "11:53 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "11:53 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:53 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "11:53 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "11:57 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "12:00 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "12:00 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "12:00 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "12:00 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "12:00 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "!!! BUZZ !!!",
+      "time": "12:01 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "sandel",
+      "text": "salut bro",
+      "time": "01:39 PM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "ce faci?",
+      "time": "01:39 PM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "01:39 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "01:39 PM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "salut",
+      "time": "09:23 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "ce faci",
+      "time": "09:23 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "suasfjaif",
+      "time": "09:23 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "\\afjlaf",
+      "time": "09:23 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "salut",
+      "time": "10:05 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "10:05 AM",
+      "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "10:05 AM",
+      "isBuzz": true
+    }
+  ]
+}
