@@ -182,6 +182,32 @@
       "text": "!!! BUZZ !!!",
       "time": "10:05 AM",
       "isBuzz": true
+    },
+    {
+      "senderId": "stefan",
+      "text": "hello",
+      "time": "10:56 AM"
+    },
+    {
+      "senderId": "sandel",
+      "text": "esti prea terminat cumetre",
+      "time": "10:56 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "oare?",
+      "time": "10:57 AM"
+    },
+    {
+      "senderId": "sandel",
+      "text": "oare ce?\\",
+      "time": "10:57 AM"
+    },
+    {
+      "senderId": "stefan",
+      "text": "!!! BUZZ !!!",
+      "time": "10:57 AM",
+      "isBuzz": true
     }
   ]
 }
