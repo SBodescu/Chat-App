@@ -1,26 +1,31 @@
-export function setUsername(userId) {
+export function setupUI(pubsub, state) {
     const display = document.getElementById('my-username-display');
     const sidebar = document.getElementById('my-sidebar-name');
-    if (display) display.innerText = userId;
-    if (sidebar) sidebar.innerText = userId;
+    if (display) display.innerText = state.userId;
+    if (sidebar) sidebar.innerText = state.userId;
+
+    pubsub.subscribe('ui:render', () => renderUsersList(pubsub, state));
+    pubsub.subscribe('chat:display', () => displayMessages(pubsub, state));
+    pubsub.subscribe('message:add', (data) => addMessageUI(data.text, data.type, data.time, data.isBuzz, pubsub, state));
+    pubsub.subscribe('user:add', (data) => handleAddUser(data, pubsub, state));
 }
 
-export function renderUsersList(chatUsers, activeChat, openChatFn) {
+function renderUsersList(pubsub, state) {
     const container = document.getElementById('friends-list-container');
     const count = document.getElementById('friends-count');
     
     if (!container) return;
     container.innerHTML = '';
     
-    const userIds = Object.keys(chatUsers);
+    const userIds = Object.keys(state.chatUsers);
     if (count) count.innerText = `▼ Friends (${userIds.length})`;
 
     userIds.forEach(id => {
-        const user = chatUsers[id];
-        const active = id === activeChat ? 'active' : '';
+        const user = state.chatUsers[id];
+        const active = id === state.activeChat ? 'active' : '';
         const div = document.createElement('div');
         div.className = `contact-item ${active}`;
-        div.addEventListener('click', () => openChatFn(id));
+        div.addEventListener('click', () => pubsub.publish('chat:select', { id }));
         div.innerHTML = `
             <span class="status-icon online">☺</span>
             <div class="contact-details">
@@ -32,21 +37,22 @@ export function renderUsersList(chatUsers, activeChat, openChatFn) {
     });
 }
 
-export function displayMessages(activeChat, chatUsers, addMessageUIFn) {
+function displayMessages(pubsub, state) {
     const display = document.getElementById('messages-display');
     if (!display) return;
     
     display.innerHTML = '';
     
-    if (activeChat && chatUsers[activeChat]) {
-        chatUsers[activeChat].messages.forEach(msg => {
-            addMessageUIFn(msg.text, msg.sender, msg.time, msg.isBuzz);
+    if (state.activeChat && state.chatUsers[state.activeChat]) {
+        state.chatUsers[state.activeChat].messages.forEach(msg => {
+            const type = msg.sender === 'me' ? 'me' : (msg.sender === 'system' ? 'system' : 'them');
+            addMessageUI(msg.text, type, msg.time, msg.isBuzz, pubsub, state);
         });
     }
     display.scrollTop = display.scrollHeight;
 }
 
-export function addMessageUI(text, type, time, isBuzz, activeChat, chatUsers) {
+function addMessageUI(text, type, time, isBuzz, pubsub, state) {
     const display = document.getElementById('messages-display');
     const div = document.createElement('div');
     div.className = 'ym-msg';
@@ -56,7 +62,7 @@ export function addMessageUI(text, type, time, isBuzz, activeChat, chatUsers) {
         div.innerHTML = `<span style="font-weight:bold; color:black;">Eu (${time}):</span> ${text}`;
     } else if (type === 'them') {
         div.classList.add('msg-them');
-        const name = chatUsers[activeChat] ? chatUsers[activeChat].name : 'Friend';
+        const name = state.chatUsers[state.activeChat] ? state.chatUsers[state.activeChat].name : 'Friend';
         div.innerHTML = `<span style="font-weight:bold; color:blue;">${name} (${time}):</span> ${text}`;
     } else if (type === 'system' || isBuzz) {
         div.classList.add('system');
@@ -67,4 +73,12 @@ export function addMessageUI(text, type, time, isBuzz, activeChat, chatUsers) {
     }
 
     display.appendChild(div);
+}
+
+function handleAddUser(data, pubsub, state) {
+    if (!state.chatUsers[data.id]) {
+        state.chatUsers[data.id] = { name: data.name, status: '<Offline>', messages: [] };
+        pubsub.publish('ui:render', {});
+    }
+    pubsub.publish('chat:select', { id: data.id });
 }
