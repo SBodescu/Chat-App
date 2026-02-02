@@ -2,9 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require("socket.io");
 const path = require('path');
-const fs = require('fs');
 const mongoose = require('mongoose');
-const { text } = require('stream/consumers');
 
 const app = express();
 const server = http.createServer(app);
@@ -12,62 +10,105 @@ const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const messagesFile = path.join(__dirname, 'messages.json');
-let messages = {};
+mongoose.connect('mongodb://localhost:27017/chatapp')
+    .then(() => console.log('Conectat la MongoDB'))
+    .catch(err => console.log('Eroare la conectarea la MongoDB:', err.message));
 
-function loadMessages() {
-    try {
-        if (fs.existsSync(messagesFile)) {
-            messages = JSON.parse(fs.readFileSync(messagesFile, 'utf8'));
-        }
-    } catch (e) {
-        console.log('Eroare la citire messages.json:', e.message);
-        messages = {};
-    }
-}
 
-function saveMessages() {
-    fs.writeFileSync(messagesFile, JSON.stringify(messages, null, 2));
-}
 
-function saveMessageToRoom(room, senderId, text, time) {
-    if (!messages[room]) {
-        messages[room] = [];
-    }
-    messages[room].push({ senderId, text, time });
-    saveMessages();
-}
+const messageSchema = new mongoose.Schema({
+    senderId: String,
+    text: String,
+    time: String,
+    isBuzz: { type: Boolean, default: false }
+});
 
-function saveBuzzToRoom(room, senderId, time) {
-    if (!messages[room]) {
-        messages[room] = [];
-    }
-    messages[room].push({ senderId, text: '!!! BUZZ !!!', time, isBuzz: true });
-    saveMessages();
-}
+const convoSchema = new mongoose.Schema({
+    roomId: String,
+    participants: [String],
+    messages: [messageSchema]
+});
 
-loadMessages();
+const Convo = mongoose.model('Convo', convoSchema);
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('Utilizator conectat:', socket.id);
-    socket.emit('load_all_messages', messages);
+    try {
+        const allConvos = await Convo.find({});
+        const messagesMap = {};
+        
+        allConvos.forEach(convo => {
+            if (convo.roomId) {
+                messagesMap[convo.roomId] = convo.messages;
+            }
+        });
+        
+        socket.emit('load_all_messages', messagesMap);
+    } catch (e) {
+        console.error("Eroare la incarcarea mesajelor:", e);
+    }
 
-    socket.on('join_room', (room) => {
+    socket.on('join_room', async (room) => {
         socket.join(room);
-        console.log(`User ${socket.id} a intrat în: ${room}`);
-        if (messages[room]) {
-            socket.emit('load_messages', messages[room]);
+        console.log(`Utilizatorul ${socket.id} a intrat în camera ${room}`);
+        try {
+            let convo = await Convo.findOne({ roomId: room });
+            if (!convo) {
+                convo = new Convo({ roomId: room, participants: room.split('_'), messages: [] });
+                await convo.save();
+            }
+            
+            socket.emit('load_messages', convo.messages);
+        } catch (e) {
+            console.error("Eroare la găsirea/crearea conversației:", e);
         }
     });
 
-    socket.on('send_message', (data) => {
-        saveMessageToRoom(data.room, data.senderId, data.text, data.time);
+    socket.on('send_message', async (data) => {
         socket.to(data.room).emit('receive_message', data);
+        socket.emit('receive_message', data);  
+        try {
+            const result = await Convo.findOneAndUpdate(
+                { roomId: data.room },
+                { 
+                    $push: { 
+                        messages: { 
+                            senderId: data.senderId, 
+                            text: data.text, 
+                            time: data.time,
+                            isBuzz: false
+                        } 
+                    } 
+                },
+                { upsert: true, new: true } 
+            );
+            console.log('Mesaj salvat în baza de date:', result.roomId);
+        } catch (e) {
+            console.error("Eroare la salvare mesaj:", e);
+        }
     });
 
-    socket.on('send_buzz', (data) => {
-        saveBuzzToRoom(data.room, data.senderId, data.time);
+    socket.on('send_buzz', async (data) => {
         io.to(data.room).emit('receive_buzz', data);
+        try {
+            const result = await Convo.findOneAndUpdate(
+                { roomId: data.room },
+                { 
+                    $push: { 
+                        messages: { 
+                            senderId: data.senderId, 
+                            text: '!!! BUZZ !!!', 
+                            time: data.time,
+                            isBuzz: true
+                        } 
+                    } 
+                },
+                { upsert: true }
+            );
+            console.log('Buzz salvat în baza de date:', result.roomId);
+        } catch (e) {
+            console.error("Eroare la salvare buzz:", e);
+        }
     });
 
     socket.on('disconnect', () => {

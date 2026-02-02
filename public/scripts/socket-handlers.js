@@ -1,4 +1,3 @@
-import { playSound } from './utils.js';
 export function registerSocketHandlers(pubsub, socket, state) {
     socket.on('load_all_messages', (allMessages) => {
         Object.keys(allMessages).forEach(room => {
@@ -77,3 +76,7 @@ export function registerSocketHandlers(pubsub, socket, state) {
     });
 }
 
+function playSound(file) {
+    const audio = new Audio(file);
+    audio.play().catch(e => {});
+}
